@@ -60,6 +60,30 @@ cd stay-awake-odin
 
 The resulting executable will be `stay-awake.exe`.
 
+## GitHub Actions
+Below is the rough `git tag` dance to delete and/or add tags to [trigger GitHub Actions](https://github.com/curtisalexander/readstat-rs/blob/main/.github/workflows/main.yml#L7-L10).
+
+```sh
+# delete local tag
+git tag --delete v0.1.0
+
+# delete remote tag
+git push origin --delete v0.1.0
+
+# add and commit local changes
+git add .
+git commit -m "commit msg"
+
+# push local changes to remote
+git push
+
+# add local tag
+git tag -a v0.1.0 -m "v0.1.0"
+
+# push local tag to remote
+git push origin --tags
+```
+
 ## Win32 Docs
 Application utilizes [SetThreadExecutionState](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setthreadexecutionstate) from the [Win32 API](https://docs.microsoft.com/en-us/windows/win32/).
 
