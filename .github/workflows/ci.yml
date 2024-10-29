@@ -21,7 +21,7 @@ jobs:
               shell: bash
             - name: Checkout
               uses: actions/checkout@v2
-            - Install toolchain
+            - name: Install toolchain
               uses: laytan/setup-odin@v2
               with:
                 token: ${{ secrets.GITHUB_TOKEN }} 
