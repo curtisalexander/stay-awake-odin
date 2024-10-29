@@ -58,6 +58,16 @@ In order to test, open PowerShell with elevated (admin) privileges. After execut
 powercfg -requests
 ```
 
+## Compile
+First, ensure [Odin](https://odin-lang.org/) has been [installed](https://odin-lang.org/docs/install/) and is available on one's [`PATH`](https://duckduckgo.com/?q=add+to+path+windows&ia=web).  Clone this repository and then run the [build.bat](build.bat) file.
+```
+git clone https://github.com/curtisalexander/stay-awake-odin.git
+cd stay-awake-odin
+.\build.bat
+```
+
+The resulting executable will be `stay-awake.exe`.
+
 ## Win32 Docs
 Application utilizes [SetThreadExecutionState](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setthreadexecutionstate) from the [Win32 API](https://docs.microsoft.com/en-us/windows/win32/).
 
@@ -67,8 +77,8 @@ Application utilizes [SetThreadExecutionState](https://docs.microsoft.com/en-us/
 - [`Rust`](https://github.com/curtisalexander/stay-awake-rs)
     - Loads `kernel32.dll` and performs a [transmute](https://doc.rust-lang.org/stable/std/mem/fn.transmute.html) to get the function [SetThreadExecutionState](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setthreadexecutionstate)
 - [`Rust`](https://github.com/curtisalexander/stay-awake2)
-    - Makes use of the [win32]() crate rather than [transmute](https://doc.rust-lang.org/stable/std/mem/fn.transmute.html) as is done in [stay-awake-rs](https://github.com/curtisalexander/stay-awake-rs)
+    - Makes use of the [windows](https://crates.io/crates/windows) crate rather than [transmute](https://doc.rust-lang.org/stable/std/mem/fn.transmute.html) as is done in [stay-awake-rs](https://github.com/curtisalexander/stay-awake-rs)
 
 ## Alternate Tools
 - [Microsoft PowerToys](https://docs.microsoft.com/en-us/windows/powertoys/) includes the [Awake](https://docs.microsoft.com/en-us/windows/powertoys/awake) utility
-    - It [also utilizes SetThreadExectionState](https://github.com/microsoft/PowerToys/blob/main/src/modules/awake/Awake/Core/APIHelper.cs#L66-L84) to keep a Windows machine awake
+    - It also utilizes [SetThreadExectionState](https://github.com/microsoft/PowerToys/blob/main/src/modules/awake/Awake/Core/Manager.cs#L108) to keep a Windows machine awake
