@@ -37,4 +37,4 @@ jobs:
                 files: |
                   ${{ env.PACKAGE_NAME }}-${{ steps.get_version.outputs.VERSION }}-${{ env.TARGET }}.zip
                 token:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  ${{ secrets.GITHUB_TOKEN }}
