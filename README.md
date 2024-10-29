@@ -1,10 +1,8 @@
 # stay-awake-odin
 Keep a Windows machine awake
 
-<!--
 ## Get
 Executable binaries for Windows may be found at the [Releases](https://github.com/curtisalexander/stay-awake-odin/releases) page.
--->
 
 ## Usage
 The executable `stay-awake.exe` is intended to be run in a terminal in order to keep one's Windows machine awake.
