@@ -1,4 +1,5 @@
-[![stay-awake-odin](https://github.com/curtisalexander/stay-awake-odin/actions/workflows/ci.yml/badge.svg)](https://github.com/curtisalexander/stay-awake-odin/actions)
+[![stay-awake-odin](https://github.com/curtisalexander/stay-awake-odin/actions/workflows/ci.yml/badge.svg)](https://github.com/curtisalexander/stay-awake-odin/actions/workflows/ci.yml)
+
 # stay-awake-odin
 Keep a Windows machine awake
 
