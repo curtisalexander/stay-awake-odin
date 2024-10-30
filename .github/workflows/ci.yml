@@ -17,7 +17,7 @@ jobs:
         steps:
             - name: Get git tag version
               id: get_version
-              run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+              run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
               shell: bash
             - name: Checkout
               uses: actions/checkout@v4
