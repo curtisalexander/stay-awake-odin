@@ -1,4 +1,4 @@
-[![stay-awake-odin](https://github.com/curtisalexander/stay-awake-odin/actions/workflows/ci.yml/badge.svg)](https://github.com/curtisalexander/stay-awake-odin/actions/workflows/ci.yml)
+[![stay-awake-odin](https://github.com/curtisalexander/stay-awake-odin/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/curtisalexander/stay-awake-odin/actions/workflows/ci.yml)
 
 # stay-awake-odin
 Keep a Windows machine awake
@@ -61,7 +61,7 @@ cd stay-awake-odin
 The resulting executable will be `stay-awake.exe`.
 
 ## GitHub Actions
-Below is the rough `git tag` dance to delete and/or add tags to [trigger GitHub Actions](https://github.com/curtisalexander/readstat-rs/blob/main/.github/workflows/main.yml#L7-L10).
+Below is the rough `git tag` dance to delete and/or add tags to [trigger GitHub Actions](https://github.com/curtisalexander/stay-awake-odin/blob/main/.github/workflows/ci.yml#L7-L10).
 
 ```sh
 # delete local tag
