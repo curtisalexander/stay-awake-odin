@@ -2,7 +2,11 @@ package stay_awake
 
 import "core:flags"
 import "core:fmt"
+import "core:log"
 import "core:os"
+import "core:os/os2"
+import "core:strings"
+import "core:testing"
 
 foreign import kernel32 "system:Kernel32.lib"
 
@@ -74,7 +78,9 @@ reset_execution_state :: proc(debug: bool) {
 		fmt.printfln("%s", colorize(ON_CYAN, "--- DEBUG END        ---"))
 	}
 
-	fmt.printfln("\nReset thread execution state:\n    %s ==> %v (%#x)\n      %s ==> %v (%#x)", colorize(RED, "From"), prev_es_label, prev_es, colorize(BLUE, "To"), next_es_label, next_es)
+	when !ODIN_TEST {
+		fmt.printfln("\nReset thread execution state:\n    %s ==> %v (%#x)\n      %s ==> %v (%#x)", colorize(RED, "From"), prev_es_label, prev_es, colorize(BLUE, "To"), next_es_label, next_es)
+	}
 }
 
 // Colors
@@ -94,6 +100,12 @@ colorize :: proc(color: string, str: string) -> string {
 	return fmt.aprintf("%s%s%s", color, str, RESET)
 }
 
+// Power states after running powercfg -requests
+power_state :: enum {
+	NONE,
+	DISPLAY,
+	SYSTEM,
+}
 
 // Main
 main :: proc() {
@@ -107,7 +119,6 @@ main :: proc() {
 	style: flags.Parsing_Style = .Odin
 	flags.parse_or_exit(&opt, os.args, style)
 
-
 	// Initialize
 	req_es : EXECUTION_STATE
 
@@ -118,7 +129,6 @@ main :: proc() {
 		req_es = ES_SYSTEM_REQUIRED
         fmt.printfln("Running in ``%s`` mode ==> the machine will not go to sleep", colorize(GREEN, "System"))
 	}
-
 
 	// state to set - must combine with ES_CONTINUOUS
 	next_es : EXECUTION_STATE = ES_CONTINUOUS | req_es
@@ -149,5 +159,100 @@ main :: proc() {
 		fmt.eprintln("Error reading: ", err)
 		return
 	}
+}
 
+powercfg_return_request :: proc(req_ps: power_state) -> string {
+	_, stdout, stderr, err := os2.process_exec(
+		os2.Process_Desc{command = []string{"sudo", "powercfg", "-requests"}},
+		context.allocator,
+	)
+	if err != nil {
+		fmt.printfln("Error running process: %v", err)
+		os2.exit(1)
+	}
+	defer delete(stdout)
+	defer delete(stderr)
+
+	stdout_str := string(stdout)
+
+	ps : power_state = .NONE
+
+	for line in strings.split_lines_iterator(&stdout_str) {
+		switch ps {
+		case .NONE:
+			break
+		case .DISPLAY:
+			if req_ps == .DISPLAY {
+				return line
+			}
+		case .SYSTEM:
+			if req_ps == .SYSTEM {
+				return line
+			}
+		}
+
+		if line == "SYSTEM:" {
+			ps = .SYSTEM
+		} else if line == "DISPLAY:" {
+			ps = .DISPLAY
+		} else {
+			ps = .NONE
+		}
+
+	}
+
+	return ""
+}
+
+@(test)
+test_execution_state_system :: proc(t: ^testing.T) {
+	next_es : EXECUTION_STATE = ES_CONTINUOUS | ES_SYSTEM_REQUIRED
+	_ = update_execution_state(next_es)
+	defer reset_execution_state(false)
+
+	res : string = powercfg_return_request(power_state.SYSTEM)
+	log.info("Result from powercfg -requests:", res)
+	testing.expectf(t, res != "None.", "Result from powercfg -requests: %s", res)
+}
+
+@(test)
+test_execution_state_display :: proc(t: ^testing.T) {
+	next_es : EXECUTION_STATE = ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED
+	_ = update_execution_state(next_es)
+	defer reset_execution_state(false)
+
+	res : string = powercfg_return_request(power_state.SYSTEM)
+	log.info("Result from powercfg -requests:", res)
+	testing.expectf(t, res != "None.", "Result from powercfg -requests: %s", res)
+}
+
+@(test)
+test_execution_state_system_then_reset :: proc(t: ^testing.T) {
+	next_es : EXECUTION_STATE = ES_CONTINUOUS | ES_SYSTEM_REQUIRED
+	_ = update_execution_state(next_es)
+	reset_execution_state(false)
+
+	res : string = powercfg_return_request(power_state.SYSTEM)
+	log.info("Result from powercfg -requests:", res)
+	testing.expectf(t, res == "None.", "Result from powercfg -requests: %s", res)
+}
+
+@(test)
+test_execution_state_display_then_reset :: proc(t: ^testing.T) {
+	next_es : EXECUTION_STATE = ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED
+	_ = update_execution_state(next_es)
+	reset_execution_state(false)
+
+	res : string = powercfg_return_request(power_state.DISPLAY)
+	log.info("Result from powercfg -requests:", res)
+	testing.expectf(t, res == "None.", "Result from powercfg -requests: %s", res)
+}
+
+@(test)
+test_execution_state_continuous :: proc(t: ^testing.T) {
+	reset_execution_state(false)
+
+	res : string = powercfg_return_request(power_state.DISPLAY)
+	log.info("Result from powercfg -requests:", res)
+	testing.expectf(t, res == "None.", "Result from powercfg -requests: %s", res)
 }
