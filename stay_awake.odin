@@ -221,7 +221,7 @@ test_execution_state_display :: proc(t: ^testing.T) {
 	_ = update_execution_state(next_es)
 	defer reset_execution_state(false)
 
-	res : string = powercfg_return_request(power_state.SYSTEM)
+	res : string = powercfg_return_request(power_state.DISPLAY)
 	log.info("Result from powercfg -requests:", res)
 	testing.expectf(t, res != "None.", "Result from powercfg -requests: %s", res)
 }
@@ -253,6 +253,10 @@ test_execution_state_continuous :: proc(t: ^testing.T) {
 	reset_execution_state(false)
 
 	res : string = powercfg_return_request(power_state.DISPLAY)
+	log.info("Result from powercfg -requests:", res)
+	testing.expectf(t, res == "None.", "Result from powercfg -requests: %s", res)
+
+	res = powercfg_return_request(power_state.SYSTEM)
 	log.info("Result from powercfg -requests:", res)
 	testing.expectf(t, res == "None.", "Result from powercfg -requests: %s", res)
 }
