@@ -47,7 +47,7 @@ Flags:
 Testing - either automated or manual - utilizes the [powercfg](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options) command line tool to validate the execution state set via [SetThreadExecutionState](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setthreadexecutionstate).
 
 ### Automated
-Run the `test.bat` file which utilizes the [Odin test runner](https://odin-lang.org/docs/testing/).  This _assumes_ that [`sudo`](https://learn.microsoft.com/en-us/windows/sudo/) is setup and available for use from the command line.
+Run the [test.bat](test.bat) file which utilizes the [Odin test runner](https://odin-lang.org/docs/testing/).  This _assumes_ that [`sudo`](https://learn.microsoft.com/en-us/windows/sudo/) is setup and available for use from the command line.
 
 ```pwsh
 .\test.bat
