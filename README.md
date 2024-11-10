@@ -55,7 +55,7 @@ Run the `test.bat` file which utilizes the [Odin test runner](https://odin-lang.
 
 The `test.bat` file runs tests with 1 thread.  If tests were run in parallel (the default) then the thread execution state could be overwritten by a different thread and tests would no longer be valid.
 
-Finally, note that there are 5 tests and _each_ test requires elevated (admin) priviledges; thus the user will be prompted to run `sudo` 5 times.
+Finally, note that there are 5 tests and _each_ test requires elevated (admin) privileges; thus the user will be prompted to run `sudo` 5 times.
 
 ### Manual
 Run the executable `stay-awake.exe`.  Open PowerShell (or a command prompt) with elevated (admin) privileges.  Execute the following.
