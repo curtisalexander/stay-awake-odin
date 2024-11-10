@@ -1,0 +1,32 @@
+{
+	"folders":
+	[
+		{"path": "."}
+	],
+	"build_systems":
+	[
+		{
+			"name": "stay_awake",
+			"cmd": "odin check .",
+			"file_regex": "^(.+)\\(([0-9]+):([0-9]+)\\) (.+)$",
+			"variants": [
+				{"name": "Build and run => no arguments",    "shell_cmd": ".\\build.bat && .\\stay-awake.exe"                },
+				{"name": "Build and run => -display",        "shell_cmd": ".\\build.bat && .\\stay-awake.exe -display"       },
+				{"name": "Build and run => -debug",          "shell_cmd": ".\\build.bat && .\\stay-awake.exe -debug"         },
+				{"name": "Build and run => -debug -display", "shell_cmd": ".\\build.bat && .\\stay-awake.exe -debug -display"},
+				{"name": "Build and run => -help",           "shell_cmd": ".\\build.bat && .\\stay-awake.exe -help"          },
+			],
+		}		
+	],
+	"settings":
+	{
+		// "auto_complete": false,
+		"LSP":
+		{
+			"odin":
+			{
+				"enabled": true,
+			},
+		},
+	},
+}
