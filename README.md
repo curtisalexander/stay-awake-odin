@@ -79,7 +79,7 @@ The resulting executable will be `stay-awake.exe`.
 ## GitHub Actions
 Below is the rough `git tag` dance to delete and/or add tags to [trigger GitHub Actions](https://github.com/curtisalexander/stay-awake-odin/blob/main/.github/workflows/ci.yml#L7-L10).
 
-```sh
+```pwsh
 # delete local tag
 git tag --delete v0.1.0
 
