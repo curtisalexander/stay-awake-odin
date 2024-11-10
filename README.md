@@ -44,11 +44,27 @@ Flags:
 ```
 
 ## Testing
-In order to test, open PowerShell with elevated (admin) privileges. After executing the program, run the following.
+Testing - either automated or manual - utilizes the [powercfg](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options) command line tool to validate the execution state set via [SetThreadExecutionState](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setthreadexecutionstate).
+
+### Automated
+Run the `test.bat` file which utilizes the [Odin test runner](https://odin-lang.org/docs/testing/).  This _assumes_ that [`sudo`](https://learn.microsoft.com/en-us/windows/sudo/) is setup and available for use from the command line.
+
+```pwsh
+.\test.bat
+```
+
+The `test.bat` file runs tests with 1 thread.  If tests were run in parallel (the default) then the thread execution state could be overwritten by a different thread and tests would no longer be valid.
+
+Finally, note that there are 5 tests and _each_ test requires elevated (admin) priviledges; thus the user will be prompted to run `sudo` 5 times.
+
+### Manual
+Run the executable `stay-awake.exe`.  Open PowerShell (or a command prompt) with elevated (admin) privileges.  Execute the following.
 
 ```pwsh
 powercfg -requests
 ```
+
+The execution states will be listed along with any programs that have made calls to `SetThreadExecutionState`.  Manually validate execution states are set as expected.
 
 ## Compile
 First, ensure [Odin](https://odin-lang.org/) has been [installed](https://odin-lang.org/docs/install/) and is available on one's [`PATH`](https://duckduckgo.com/?q=add+to+path+windows&ia=web).  Clone this repository and then run the [build.bat](build.bat) file.
@@ -85,15 +101,15 @@ git push origin --tags
 ```
 
 ## Win32 Docs
-Application utilizes [SetThreadExecutionState](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setthreadexecutionstate) from the [Win32 API](https://docs.microsoft.com/en-us/windows/win32/).
+The application utilizes [SetThreadExecutionState](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setthreadexecutionstate) from the [Win32 API](https://docs.microsoft.com/en-us/windows/win32/).
 
 ## Prior Implementations
 - [`C#`](https://github.com/curtisalexander/stay-awake-cs)
 - [`PowerShell`](https://github.com/curtisalexander/stay-awake-ps)
-- [`Rust`](https://github.com/curtisalexander/stay-awake-rs)
+- [`Rust v1`](https://github.com/curtisalexander/stay-awake-rs)
     - Loads `kernel32.dll` and performs a [transmute](https://doc.rust-lang.org/stable/std/mem/fn.transmute.html) to get the function [SetThreadExecutionState](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setthreadexecutionstate)
-- [`Rust`](https://github.com/curtisalexander/stay-awake2)
-    - Makes use of the [windows](https://crates.io/crates/windows) crate rather than [transmute](https://doc.rust-lang.org/stable/std/mem/fn.transmute.html) as is done in [stay-awake-rs](https://github.com/curtisalexander/stay-awake-rs)
+- [`Rust v2`](https://github.com/curtisalexander/stay-awake2)
+    - Makes use of the [windows crate](https://crates.io/crates/windows) rather than [transmute](https://doc.rust-lang.org/stable/std/mem/fn.transmute.html) as is done in [stay-awake-rs](https://github.com/curtisalexander/stay-awake-rs)
 
 ## Alternate Tools
 - [Microsoft PowerToys](https://docs.microsoft.com/en-us/windows/powertoys/) includes the [Awake](https://docs.microsoft.com/en-us/windows/powertoys/awake) utility
